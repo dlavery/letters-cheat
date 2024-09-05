@@ -163,3 +163,4 @@ cython_debug/
 
 # Custom
 english-words/
+*.code-workspace

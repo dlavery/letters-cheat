@@ -8,36 +8,9 @@ def update_db(conn, cur, str, debug=False):
     if debug:
         print(r)
     cur.execute(
-        "INSERT INTO " + conn.info.dbname + ".words (word) " + 
+        "INSERT INTO " + conn.info.dbname + ".rawwords (word) " + 
         "VALUES (%s) RETURNING word_id", 
         (r, ))
-    ret = cur.fetchone()
-    word_id = ret[0]
-    token = ''.join(sorted(r))
-    if debug:
-        print(token)
-    cur.execute(
-        "SELECT token_id FROM " + conn.info.dbname + ".tokens " + 
-        "WHERE token = %s", 
-        (token,))
-    ret = cur.fetchone()
-    if ret:
-        token_id = ret[0]
-    else:
-        cur.execute(
-            "INSERT INTO " + conn.info.dbname + ".tokens (token) " + 
-            "VALUES (%s) RETURNING token_id", 
-            (token,))
-        ret = cur.fetchone()
-        token_id = ret[0]
-        if debug:
-            print('tokens inserted')
-    cur.execute(
-        "INSERT INTO " + conn.info.dbname + ".tokens_words (tokens_id, words_id) " + 
-        "VALUES (%s, %s)",
-        (token_id, word_id))
-    if debug:
-        print('tokens_words inserted')
     conn.commit()
 
 if __name__ == '__main__':
@@ -55,14 +28,17 @@ if __name__ == '__main__':
                     while r:
                         r = r.strip()
                         l = len(r)
-                        # discard trivial words and those > 9 characters
-                        if l > 3 and l < 10:
+                        # discard trivial words
+                        if l > 3:
                             # add to DB
                             update_db(conn, cur, r, False)
                         r = file.readline()
-                        #ctr+= 1
+                        ctr+= 1
+                        if ctr // 1000 == ctr / 1000:
+                            print(ctr, "words loaded")
                         #if ctr > 10000: # for testing
                         #    break
+        print(ctr, "words loaded")
     except (psycopg2.DatabaseError, Exception) as error:
         if conn:
             conn.rollback()
