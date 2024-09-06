@@ -22,7 +22,7 @@ def do_wordle(cfg:dict, attempts:str, debug:bool=False) -> list[tuple]:
                         pass
                     if pattn[i+1] == '.':
                         pattn[i+1] = [attempt[i]]
-                    elif type(pattn[i+1] == list):
+                    elif type(pattn[i+1]) == list:
                         pattn[i+1].append(attempt[i])
                 elif res[i] == 'n':
                     if attempt[i] not in not_present \
@@ -31,11 +31,14 @@ def do_wordle(cfg:dict, attempts:str, debug:bool=False) -> list[tuple]:
                         not_present.append(attempt[i])
                     if pattn[i+1] == '.':
                         pattn[i+1] = [attempt[i]]
-                    elif type(pattn[i+1] == list):
+                    elif type(pattn[i+1]) == list:
                         pattn[i+1].append(attempt[i])
                 elif res[i] == 'y':
                     try:
                         present.remove(attempt[i])
+                    except ValueError:
+                        pass
+                    try:
                         not_present.remove(attempt[i])
                     except ValueError:
                         pass
