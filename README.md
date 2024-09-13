@@ -14,9 +14,9 @@ And NOW...
 Cheat at Wordle!
 
 Add the new table to the wordlist database using the db-rawwords.sql file in the db-migrations folder then run loadrawwords.py to populate the table from the english-words list. Run findwordle.py where you will be asked to enter your attempts and the responses to them. Type "exit" or "quit" here to exit the program, type "done" at the attempt prompt once you have entered your attempts to receive solution hints. Reponses should be coded as:
-y - correct letter in the correct place
-o - correct letter in the incorrect place
-n - incorrect letter
+y - yes, correct letter in the correct place
+n - no, incorrect letter
+o - other, correct letter in the incorrect place
 
 e.g. if the word is "beast" and your attempt is "baker" then the response would be "yonon" (green, yellow, grey, yellow, grey on most apps/sites).
 
